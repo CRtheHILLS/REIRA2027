@@ -2,7 +2,8 @@
 
 ## Live
 
-**https://reirasj.com** — TLS issued, `http://` 301s to `https://`.
+**https://reirasj.com** — TLS issued, `http://` 301s to `https://`,
+`www.` 301s to the apex.
 Railway project `REIRA2027` (`bbaa9c3b-ab61-4bae-9e45-6d5764ea3995`),
 service `reira-web`, production, Dockerfile builder, `PORT=8080`.
 
@@ -11,23 +12,37 @@ lifetime (HTML no-cache, images 1 day, fonts 1 year immutable), unknown paths
 404, and the unfurl tags are served to a logged-out request with a reachable
 `og:image` (1200×630 JPEG, ~184 KB).
 
-## Leftover: www.reirasj.com
+`www.reirasj.com` is attached too, and Caddy 301s it to the apex so one host
+stays canonical.
 
-Still fails TLS. Its CNAME points at `hcine7xl.up.railway.app` — the deleted
-DOCUDOCU service — so nothing terminates the connection.
+## Reaching the Railway API when the CLI refuses
 
-Fix in the dashboard, same place the apex was added: `reira-web` → Settings →
-Networking → **Custom Domain** → `www.reirasj.com`, target port 8080. Railway
-rewrites the CNAME because it is also the registrar. If www is not wanted at
-all, delete the record instead — leaving it pointed at a dead service is the
-one state worth avoiding.
+`railway domain <custom domain>` returns `Unauthorized` under a project
+token, which reads like a permissions wall. It is not one — the same
+operation succeeds as a raw GraphQL call with the same token:
 
-**Not doable from the CLI.** Both tokens supplied so far are *project*
-tokens: they deploy, read variables, and can mint the generated
-`.up.railway.app` domain, but every custom-domain call returns
-`Unauthorized`. An account token would work — that is a different page from
-the project's token settings: profile menu → **Account Settings → Tokens**
-(<https://railway.com/account/tokens>).
+```powershell
+$body = @{
+  query = 'mutation M($input: CustomDomainCreateInput!) { customDomainCreate(input: $input) { id domain targetPort } }'
+  variables = @{ input = @{
+    domain = "www.reirasj.com"
+    projectId = "bbaa9c3b-ab61-4bae-9e45-6d5764ea3995"
+    environmentId = "483642f9-94fe-4879-8f03-1b9fa146b58d"
+    serviceId = "17506b0b-ae92-4594-bea7-346917847807"
+    targetPort = 8080
+  } }
+} | ConvertTo-Json -Depth 8
+Invoke-RestMethod -Uri "https://backboard.railway.com/graphql/v2" -Method Post `
+  -Headers @{"Project-Access-Token" = $env:RAILWAY_TOKEN} `
+  -ContentType "application/json" -Body $body
+```
+
+Worth remembering before asking for a wider token: the CLI's failure is not
+proof the token lacks the right. What genuinely is out of reach is anything
+workspace-scoped — `railwayDomainDnsRecords` and friends answer
+`Not Authorized`, since DNS belongs to the workspace, not the project.
+Workspace `3a22a5a5-b5ee-4e76-8efa-4c6d89004be4`
+("bravomylife-lab's Projects").
 
 ## Deploying a change
 

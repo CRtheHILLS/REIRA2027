@@ -14,6 +14,13 @@
 }
 
 :{$PORT:8080} {
+	# Both reirasj.com and www.reirasj.com are routed here by Railway. Send
+	# www to the apex so one host is canonical — og:url, the canonical link
+	# and the sitemap all name the bare domain, and a crawler that can reach
+	# the same pages under two hosts splits their ranking between them.
+	@www host www.reirasj.com
+	redir @www https://reirasj.com{uri} permanent
+
 	root * /srv
 	encode zstd gzip
 	file_server
