@@ -1,7 +1,10 @@
 # REIRA2027 — reirasj.com
 
-Official site for the K-POP ballad artist **REIRA (레이라)**.
-Management & production: **CRtheHILLS**.
+Official site for the K-POP ballad artist and lyricist **REIRA (레이라)** —
+CRtheHILLS' first artist launch, 2027.
+
+Live: <https://reira-web-production.up.railway.app>
+(`reirasj.com` pending — see [NEXT.md](NEXT.md))
 
 A single static page. No build step, no framework runtime to compile — the
 HTML ships as-is and Caddy serves it.
@@ -36,13 +39,19 @@ Opening `index.html` from the filesystem works too — every path is relative.
 
 ## Deploy
 
-Railway builds the `Dockerfile` and runs Caddy on the `$PORT` it injects.
-Pushing to `main` triggers a deploy.
+Railway builds the `Dockerfile` and runs Caddy on `$PORT`, pinned to 8080 as
+a service variable so the custom-domain target port has something stable to
+point at.
 
 ```bash
-railway login
-railway link          # pick the REIRA2027 project
-railway up            # or just `git push`, once the GitHub repo is connected
+$env:RAILWAY_TOKEN = "<project token>"
+railway up --ci --service reira-web
 ```
 
-The custom domain `reirasj.com` is attached in Railway → Settings → Networking.
+A project token is enough to deploy and read variables. It is **not** enough
+to manage services or domains — those calls return `Unauthorized` and need
+the dashboard or an account token.
+
+The GitHub repo is not wired to the service yet, so pushing to `main` does
+not deploy on its own; run `railway up` after pushing. Connecting the repo in
+the dashboard (Settings → Source) turns pushes into deploys.
