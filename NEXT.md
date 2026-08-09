@@ -31,15 +31,18 @@ the project's token settings: profile menu → **Account Settings → Tokens**
 
 ## Deploying a change
 
-The GitHub repo is **not** connected to the service, so `git push` alone does
-not deploy:
+Push to `main`. The `REIRA2027` service is connected to the GitHub repo and
+deploys on its own — no `railway up` needed.
 
-```powershell
-$env:RAILWAY_TOKEN = "<project token>"
-railway up --ci --service reira-web
-```
+`railway up` is what created the stray `reira-web` service in the first
+place: the very first run happened while the project had no services at all,
+so the CLI made one, and it sat there serving a second copy of the same
+container on a generated domain until it was deleted. If a manual upload is
+ever needed again, always pass `--service REIRA2027`.
 
-Connect the repo in Settings → Source to make pushes deploy on their own.
+`PORT=8080` is pinned as a service variable so the custom domain's target
+port has something fixed to point at, rather than depending on Caddy's own
+fallback.
 
 ## Once the link goes out
 

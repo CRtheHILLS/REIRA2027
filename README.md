@@ -38,19 +38,17 @@ Opening `index.html` from the filesystem works too — every path is relative.
 
 ## Deploy
 
-Railway builds the `Dockerfile` and runs Caddy on `$PORT`, pinned to 8080 as
-a service variable so the custom-domain target port has something stable to
-point at.
+Push to `main`. Railway's `REIRA2027` service watches the repo, builds the
+`Dockerfile`, and runs Caddy on `$PORT` — pinned to 8080 as a service
+variable so the custom domain's target port has something fixed to point at.
 
-```bash
+A manual upload needs the service named explicitly, or the CLI will offer to
+create a new service instead:
+
+```powershell
 $env:RAILWAY_TOKEN = "<project token>"
-railway up --ci --service reira-web
+railway up --ci --service REIRA2027
 ```
 
-A project token is enough to deploy and read variables. It is **not** enough
-to manage services or domains — those calls return `Unauthorized` and need
-the dashboard or an account token.
-
-The GitHub repo is not wired to the service yet, so pushing to `main` does
-not deploy on its own; run `railway up` after pushing. Connecting the repo in
-the dashboard (Settings → Source) turns pushes into deploys.
+A project token deploys and reads variables. It cannot manage services or
+domains — those calls return `Unauthorized` and need the dashboard.
