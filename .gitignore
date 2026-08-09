@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
+# OMC / Claude working state
+.omc/
+.claude/settings.local.json

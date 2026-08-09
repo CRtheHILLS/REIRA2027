@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#FF2E7E"/>
+  <circle cx="310" cy="95" r="70" fill="#FFD028" stroke="#141018" stroke-width="8"/>
+  <circle cx="80" cy="320" r="52" fill="#37E0FF" stroke="#141018" stroke-width="8"/>
+  <text x="200" y="230" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="86"
+        fill="#F7F2E7" stroke="#141018" stroke-width="6" paint-order="stroke">REIRA</text>
+</svg>

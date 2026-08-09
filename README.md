@@ -1,0 +1,48 @@
+# REIRA2027 — reirasj.com
+
+Official site for the K-POP ballad artist **REIRA (레이라)**.
+Management & production: **CRtheHILLS**.
+
+A single static page. No build step, no framework runtime to compile — the
+HTML ships as-is and Caddy serves it.
+
+## Layout
+
+```
+index.html              the whole page (markup + inline styles + <helmet> block)
+assets/js/dc-runtime.js declarative-components runtime: resolves <x-dc>,
+                        <helmet>, and the style-hover="…" attributes
+assets/fonts/           subsetted Archivo / Bodoni Moda + variable Pretendard
+assets/img/             photography, favicon
+vendor/                 React 18.3.1 UMD, pinned (carried by the runtime)
+Caddyfile               static server config (cache headers, compression)
+Dockerfile              caddy:2-alpine + the files above
+railway.json            tells Railway to build from the Dockerfile
+```
+
+`index.html` was recovered from a Claude artifact bundle: assets were extracted
+from the bundle manifest, given readable filenames, and the uuid references
+rewritten to relative paths.
+
+## Run it locally
+
+Any static server works, as long as it serves from the repo root:
+
+```bash
+npx serve .          # or: python -m http.server 8080
+```
+
+Opening `index.html` from the filesystem works too — every path is relative.
+
+## Deploy
+
+Railway builds the `Dockerfile` and runs Caddy on the `$PORT` it injects.
+Pushing to `main` triggers a deploy.
+
+```bash
+railway login
+railway link          # pick the REIRA2027 project
+railway up            # or just `git push`, once the GitHub repo is connected
+```
+
+The custom domain `reirasj.com` is attached in Railway → Settings → Networking.

@@ -1,0 +1,9 @@
+.git
+.gitignore
+.omc
+.claude
+*.md
+!index.html
+bundle-report.json
+Dockerfile
+.dockerignore
