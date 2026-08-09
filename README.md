@@ -3,8 +3,7 @@
 Official site for the K-POP ballad artist and lyricist **REIRA (레이라)** —
 CRtheHILLS' first artist launch, 2027.
 
-Live: <https://reira-web-production.up.railway.app>
-(`reirasj.com` pending — see [NEXT.md](NEXT.md))
+Live: <https://reirasj.com>
 
 A single static page. No build step, no framework runtime to compile — the
 HTML ships as-is and Caddy serves it.

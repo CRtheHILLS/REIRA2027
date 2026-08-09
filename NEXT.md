@@ -1,64 +1,61 @@
 # NEXT
 
-## Live now
+## Live
 
-- **https://reira-web-production.up.railway.app** — deployed and verified.
-- Railway project `REIRA2027` (`bbaa9c3b-ab61-4bae-9e45-6d5764ea3995`),
-  service `reira-web`, environment `production`, Dockerfile builder.
+**https://reirasj.com** — TLS issued, `http://` 301s to `https://`.
+Railway project `REIRA2027` (`bbaa9c3b-ab61-4bae-9e45-6d5764ea3995`),
+service `reira-web`, production, Dockerfile builder, `PORT=8080`.
 
-## The one blocker: reirasj.com
+Verified on the real domain: every asset 200s with the right MIME and cache
+lifetime (HTML no-cache, images 1 day, fonts 1 year immutable), unknown paths
+404, and the unfurl tags are served to a logged-out request with a reachable
+`og:image` (1200×630 JPEG, ~184 KB).
 
-The domain is bought through Railway but is **still attached to the old
-`DOCUDOCU` project**, so Railway refuses to add it here:
+## Leftover: www.reirasj.com
 
-> Domain is in use by service "DOCUDOCU" in project "DOCUDOCU" (production)
+Still fails TLS. Its CNAME points at `hcine7xl.up.railway.app` — the deleted
+DOCUDOCU service — so nothing terminates the connection.
 
-A domain can only point at one service, so it has to be released before it
-can be claimed. In the dashboard:
+Fix in the dashboard, same place the apex was added: `reira-web` → Settings →
+Networking → **Custom Domain** → `www.reirasj.com`, target port 8080. Railway
+rewrites the CNAME because it is also the registrar. If www is not wanted at
+all, delete the record instead — leaving it pointed at a dead service is the
+one state worth avoiding.
 
-1. `DOCUDOCU` → production → the service holding the domain → **Settings →
-   Networking** → the `reirasj.com` custom domain → **Remove**.
-2. `REIRA2027` → `reira-web` → **Settings → Networking → Custom Domain** →
-   `reirasj.com`, **target port 8080**.
-3. Repeat for `www.reirasj.com` if you want the www form to resolve.
+**Not doable from the CLI.** Both tokens supplied so far are *project*
+tokens: they deploy, read variables, and can mint the generated
+`.up.railway.app` domain, but every custom-domain call returns
+`Unauthorized`. An account token would work — that is a different page from
+the project's token settings: profile menu → **Account Settings → Tokens**
+(<https://railway.com/account/tokens>).
 
-Because Railway is the registrar, DNS is configured automatically — no
-records to copy into a registrar. TLS is issued within a few minutes.
+## Deploying a change
 
-The CLI cannot do step 1 or 2: the project token deploys and reads
-variables, but every domain and service management call returns
-`Unauthorized`. That needs the dashboard, or an account token from
-<https://railway.com/account/tokens>.
+The GitHub repo is **not** connected to the service, so `git push` alone does
+not deploy:
 
-Nothing in the repo has to change when the domain moves — `og:image`,
-`canonical` and the sitemap already point at `https://reirasj.com/`.
+```powershell
+$env:RAILWAY_TOKEN = "<project token>"
+railway up --ci --service reira-web
+```
 
-## Once the domain is attached
+Connect the repo in Settings → Source to make pushes deploy on their own.
 
-- Paste the link into KakaoTalk to check the unfurl. Kakao caches the first
-  card it sees per URL; flush at <https://developers.kakao.com/tool/clear/og>.
-- Confirm the scraper can reach the image logged-out:
-  `curl -I https://reirasj.com/assets/img/og-cover.jpg` → `200`, `image/jpeg`.
+## Once the link goes out
 
-## Verified so far
-
-- All 17 local references in `index.html` resolve; no orphaned assets.
-- Page body is byte-identical to the final `REIRA.html` export.
-- Full-page render in headless Chromium: zero failed resource loads, the
-  `dc-runtime` consumes every `<helmet>`/`<x-dc>` element, fonts and both
-  photographs load.
-- Response headers: `text/html` no-cache, images 1 day, fonts 1 year
-  immutable, unknown paths 404.
+- Paste into KakaoTalk and check the card. Kakao caches the first one it sees
+  per URL — flush at <https://developers.kakao.com/tool/clear/og>.
+- Facebook and X keep their own caches with their own debuggers.
+- Regenerate the card after any copy change: `npm run og`.
 
 ## Known cosmetic quirk
 
 The lyricist credits grid is `auto-fit` with a 260px minimum, so at desktop
 width six cards land in a four-column grid and the last row leaves two empty
-cells. The grid container is `#141018`, so the gap reads as the FERMATA card
-running wide rather than as a hole. It came that way in the export and the
-body is deliberately kept byte-identical to it — worth a decision next time
-the page is re-exported rather than patched here, since a patch would show
-up as a conflict against the next export.
+cells. The container is `#141018`, so the gap reads as the FERMATA card
+running wide rather than as a hole. It came that way in the export, and the
+page body is deliberately byte-identical to `REIRA.html` — fix it in the
+artifact (three columns) rather than here, or the next re-export conflicts.
 
 ## Content still to fill in
 
