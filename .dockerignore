@@ -1,9 +1,14 @@
+# The image is built by COPYing an explicit allowlist (see Dockerfile), but
+# keeping the build context small still speeds every deploy up.
 .git
 .gitignore
+.gitattributes
+.dockerignore
+Dockerfile
+node_modules
+package.json
+package-lock.json
+tools
+*.md
 .omc
 .claude
-*.md
-!index.html
-bundle-report.json
-Dockerfile
-.dockerignore

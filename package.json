@@ -1,0 +1,13 @@
+{
+  "name": "reira2027",
+  "private": true,
+  "description": "reirasj.com — official site for K-POP ballad artist REIRA (레이라)",
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes serve .",
+    "og": "node tools/render-og.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.3"
+  }
+}

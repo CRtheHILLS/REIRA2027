@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>REIRA — OG card source (1200×630)</title>
+<!--
+  Design source for assets/img/og-cover.jpg — the card that unfurls when
+  reirasj.com is pasted into KakaoTalk, iMessage, Slack, X, Discord.
+  Rendered by tools/render-og.mjs; see that file for the how.
+  The board is exactly 1200×630 (the 1.91:1 every scraper crops to), so
+  nothing here may reflow — every size is absolute on purpose.
+-->
+<style>
+  @font-face {
+    font-family: 'Bodoni Moda';
+    font-style: normal;
+    font-weight: 400 900;
+    src: url("../assets/fonts/bodoni-moda-latin.woff2") format('woff2');
+  }
+  @font-face {
+    font-family: 'Bodoni Moda';
+    font-style: italic;
+    font-weight: 400 900;
+    src: url("../assets/fonts/bodoni-moda-italic-latin.woff2") format('woff2');
+  }
+  @font-face {
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 100 900;
+    src: url("../assets/fonts/archivo-latin.woff2") format('woff2');
+  }
+  @font-face {
+    font-family: 'Pretendard';
+    src: url("../assets/fonts/pretendard-variable.woff2") format('woff2-variations');
+    font-weight: 100 900;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    font-family: 'Archivo', 'Pretendard', sans-serif;
+    background: #F7F2E7;
+    color: #141018;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  #card {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: #FF2E7E;
+    display: grid;
+    grid-template-columns: 690px 510px;
+  }
+
+  /* ── left: the type block ─────────────────────────────────────────── */
+  .left {
+    position: relative;
+    padding: 54px 44px 0 60px;
+    overflow: hidden;
+  }
+  /* Halftone wash — the pop-art tell, kept faint so type stays first. */
+  .dots {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(#141018 21%, transparent 22%);
+    background-size: 22px 22px;
+    opacity: 0.16;
+  }
+  .blob-gold {
+    position: absolute; right: -150px; top: -165px;
+    width: 330px; height: 330px; border-radius: 9999px;
+    background: #FFD028; border: 5px solid #141018;
+  }
+  .blob-violet {
+    position: absolute; left: -95px; bottom: 55px;
+    width: 215px; height: 215px; border-radius: 9999px;
+    background: #C892FF; border: 5px solid #141018;
+  }
+  .left-inner { position: relative; z-index: 2; }
+
+  .kicker {
+    display: inline-flex;
+    padding: 9px 18px;
+    background: #141018; color: #F7F2E7;
+    border-radius: 9999px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.26em;
+  }
+
+  .wordmark {
+    margin-top: 26px;
+    font-family: 'Bodoni Moda', serif;
+    font-weight: 900;
+    /* Bodoni at 900 runs ~0.72em per cap, so five caps plus the 14px
+       shadow throw have to clear the 586px of usable column width. */
+    font-size: 148px;
+    line-height: 0.8;
+    letter-spacing: -0.035em;
+    color: #F7F2E7;
+    /* Stacked hard offsets — ink outline, then a cyan lift behind it. */
+    text-shadow:
+       5px  5px 0 #141018,
+      11px 11px 0 #37E0FF,
+      14px 14px 0 #141018;
+  }
+
+  .hangul-row {
+    margin-top: 30px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .hangul {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700; font-size: 25px; letter-spacing: 0.3em;
+    color: #141018;
+  }
+  .rule { width: 54px; height: 4px; background: #141018; }
+  .place { font-size: 14px; font-weight: 700; letter-spacing: 0.24em; color: #141018; }
+
+  .tagline {
+    margin-top: 26px;
+    max-width: 500px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 20px; line-height: 1.7; font-weight: 500;
+    color: #2A0A18;
+    text-wrap: pretty;
+  }
+
+  .album {
+    margin-top: 30px;
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 15px 28px;
+    background: #141018; color: #FFD028;
+    border-radius: 9999px;
+    font-size: 15px; font-weight: 800; letter-spacing: 0.2em;
+  }
+  .album .dot { color: #FF2E7E; }
+
+  /* ── right: the photograph ────────────────────────────────────────── */
+  .right {
+    position: relative;
+    background: #37E0FF;
+    border-left: 5px solid #141018;
+    overflow: hidden;
+    /* Keep the blend below from reaching past this panel into the pink. */
+    isolation: isolate;
+  }
+  .right img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: 50% 12%;
+    display: block;
+    /* The source photograph is already a pink duotone, which against a pink
+       left half collapses the whole card into one flat field. Luminosity
+       keeps her tonal range and takes the panel's cyan instead — the same
+       one-face-many-colours move the site's "four moods" strip makes. */
+    mix-blend-mode: luminosity;
+  }
+  /* Halftone over the photo, matching the left half's wash. */
+  .right::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(#141018 20%, transparent 21%);
+    background-size: 20px 20px;
+    opacity: 0.14;
+  }
+
+  .seal {
+    position: absolute; right: 34px; top: 30px; z-index: 3;
+    width: 138px; height: 138px; border-radius: 9999px;
+    background: #FFD028; border: 5px solid #141018;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    font-size: 14px; font-weight: 800; letter-spacing: 0.14em; line-height: 1.55;
+    color: #141018;
+    transform: rotate(-9deg);
+  }
+  .seal .yr { font-family: 'Bodoni Moda', serif; font-size: 27px; letter-spacing: 0.02em; }
+
+  .edition {
+    position: absolute; left: 26px; bottom: 92px; z-index: 3;
+    padding: 10px 20px;
+    background: #F7F2E7; border: 4px solid #141018; border-radius: 9999px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.22em;
+  }
+
+  /* ── bottom rail ──────────────────────────────────────────────────── */
+  .rail {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 4;
+    height: 66px;
+    background: #141018;
+    border-top: 5px solid #141018;
+    display: flex; align-items: center; gap: 30px;
+    padding: 0 60px;
+    font-family: 'Bodoni Moda', serif;
+    font-weight: 700; font-size: 21px; letter-spacing: 0.04em;
+    color: #F7F2E7;
+    white-space: nowrap;
+  }
+  .rail .star-p { color: #FF2E7E; }
+  .rail .star-g { color: #FFD028; }
+  .rail .star-c { color: #37E0FF; }
+  .rail .sans {
+    font-family: 'Archivo', sans-serif;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.22em;
+  }
+  .rail .spacer { margin-left: auto; }
+</style>
+</head>
+<body>
+<div id="card">
+
+  <div class="left">
+    <div class="dots"></div>
+    <div class="blob-gold"></div>
+    <div class="blob-violet"></div>
+
+    <div class="left-inner">
+      <span class="kicker">K-POP BALLAD ARTIST</span>
+      <div class="wordmark">REIRA</div>
+      <div class="hangul-row">
+        <span class="hangul">레 이 라</span>
+        <span class="rule"></span>
+        <span class="place">SEOUL, KOREA</span>
+      </div>
+      <p class="tagline">가장 조용한 순간에 닿는 목소리.<br>숨결처럼 번지고, 여백에서 완성되는 노래.</p>
+      <span class="album">NEW ALBUM <span class="dot">·</span> 2027.03</span>
+    </div>
+  </div>
+
+  <div class="right">
+    <img src="../assets/img/reira-hero.jpg" alt="">
+    <div class="seal">NEW<br>ALBUM<br><span class="yr">2027</span></div>
+    <div class="edition">POP ART EDITION</div>
+  </div>
+
+  <div class="rail">
+    <span class="sans">REIRASJ.COM</span>
+    <span class="star-p">★</span>
+    <span style="font-style:italic;">Reira</span>
+    <span class="star-c">★</span>
+    <span class="sans spacer">MANAGEMENT &amp; PRODUCTION</span>
+    <span class="star-g">★</span>
+    <span>CR<span style="color:#FF2E7E;">the</span>HILLS</span>
+  </div>
+
+</div>
+</body>
+</html>
